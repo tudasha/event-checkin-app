@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -19,6 +19,31 @@ function RegisterView() {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
   
+  // Debug Logs State
+  const [logs, setLogs] = useState([]);
+  const [showLogs, setShowLogs] = useState(false);
+
+  // Initial debug log
+  useEffect(() => {
+    addLog(`App Mounted. Axios baseURL: ${axios.defaults.baseURL || 'EMPTY (using relative path)'}`);
+  }, []);
+
+  const addLog = (message) => {
+    const time = new Date().toISOString().split('T')[1].substring(0, 8);
+    const logStr = `[${time}] ${message}`;
+    setLogs(prev => [...prev, logStr]);
+    console.log(logStr);
+  };
+
+  const copyLogs = () => {
+    navigator.clipboard.writeText(logs.join('\n')).then(() => {
+      setMsg('Logs copied to clipboard!');
+      setTimeout(() => setMsg(''), 2000);
+    }).catch(err => {
+      addLog(`Copy failed: ${err.message}`);
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -40,18 +65,32 @@ function RegisterView() {
     e.preventDefault();
     if(!formData.fullName || !formData.age) {
         setMsg('Please fill out name and age');
+        addLog('Form submission blocked: Missing name or age.');
         return;
     }
 
     setLoading(true);
     setMsg('');
     try {
-        await axios.post(`/api/attendees`, { ...formData, hasCheckedIn: checkInNow });
+        const payload = { ...formData, hasCheckedIn: checkInNow };
+        addLog(`POST /api/attendees | Payload: ${JSON.stringify(payload)}`);
+        
+        const res = await axios.post(`/api/attendees`, payload);
+        addLog(`Success! Status: ${res.status}. Data: ${JSON.stringify(res.data)}`);
+        
         setMsg('Successfully Registered!');
         setTimeout(() => navigate('/'), 2000);
     } catch(err) {
+        let errDesc = err.message;
+        if (err.response) {
+            errDesc += ` | Code: ${err.response.status} | Data: ${JSON.stringify(err.response.data)}`;
+        } else if (err.request) {
+            errDesc += ` | The request was made but no response was received (Network error/CORS).`;
+        }
+        
+        addLog(`ERROR: ${errDesc}`);
         console.error(err);
-        setMsg('Registration failed. Check server connection.');
+        setMsg(`Error: ${err.message}`);
     } finally {
         setLoading(false);
     }
@@ -66,7 +105,7 @@ function RegisterView() {
             top: '30px',
             left: '50%',
             transform: 'translateX(-50%)',
-            background: msg.includes('failed') || msg.includes('fill') ? 'hsl(0, 70%, 55%)' : 'hsl(140, 60%, 45%)',
+            background: msg.includes('Error') || msg.includes('failed') || msg.includes('fill') ? 'hsl(0, 70%, 55%)' : 'hsl(140, 60%, 45%)',
             color: 'white',
             padding: '12px 24px',
             borderRadius: '24px',
@@ -76,7 +115,7 @@ function RegisterView() {
             fontWeight: 'bold',
             animation: 'fadeIn 0.3s ease-in-out'
         }}>
-            {msg.includes('failed') || msg.includes('fill') ? '⚠️ ' : '✅ '}
+            {msg.includes('Error') || msg.includes('failed') || msg.includes('fill') ? '⚠️ ' : '✅ '}
             {msg}
         </div>
       )}
@@ -122,8 +161,53 @@ function RegisterView() {
             </button>
         </div>
       </form>
+
+      {/* Debug Logs Section */}
+      <div style={{ marginTop: '20px', marginBottom: '40px' }}>
+        <button 
+          type="button" 
+          className="neu-button" 
+          onClick={() => setShowLogs(!showLogs)}
+        >
+          {showLogs ? 'Hide Debug Logs' : 'Show Debug Logs'}
+        </button>
+
+        {showLogs && (
+          <div className="neu-card" style={{ marginTop: '10px', padding: '15px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <h3 style={{ margin: 0, fontSize: '1rem' }}>Terminal</h3>
+                <button 
+                  type="button" 
+                  className="neu-button primary" 
+                  style={{ width: 'auto', padding: '6px 16px', margin: 0 }}
+                  onClick={copyLogs}
+                >
+                  Copy All
+                </button>
+            </div>
+            
+            <div style={{ 
+              background: '#1a1a1a', 
+              color: '#00ff00', 
+              padding: '10px', 
+              borderRadius: '8px', 
+              fontSize: '12px',
+              fontFamily: 'monospace',
+              maxHeight: '200px', 
+              overflowY: 'auto',
+              textAlign: 'left',
+              wordBreak: 'break-all'
+            }}>
+              {logs.length === 0 ? 'No logs yet...' : logs.map((l, i) => (
+                <div key={i} style={{ marginBottom: '4px' }}>{l}</div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }
 
 export default RegisterView;
+
