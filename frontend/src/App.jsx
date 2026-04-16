@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import ScannerView from './pages/ScannerView';
 import Dashboard from './pages/Dashboard';
 import RegisterView from './pages/RegisterView';
