@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: event-backend
+    env: docker
+    plan: free
+    branch: main
+    envVars:
+      - key: DB_URL
+        fromDatabase:
+          name: event-db
+          property: connectionString
+      - key: DB_USER
+        fromDatabase:
+          name: event-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: event-db
+          property: password
+    rootDir: backend
+
+databases:
+  - name: event-db
+    databaseName: eventdb
+    user: eventuser
+    plan: free
