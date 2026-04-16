@@ -1,0 +1,128 @@
+:root {
+  /* Brand colors */
+  --primary: hsl(24, 89%, 65%);
+  --background: hsl(40, 30%, 97%);
+  --surface: hsl(40, 20%, 94%);
+  --text-dark: hsl(240, 10%, 8%);
+  --text-light: hsl(40, 30%, 97%);
+  --surface-dark: hsl(240, 10%, 8%);
+  
+  /* Neumorphism Shadows for Light Mode (Cream) */
+  --neu-shadow-light: 5px 5px 10px hsl(40, 20%, 89%), 
+                      -5px -5px 10px hsl(40, 30%, 100%);
+  --neu-shadow-inset-light: inset 5px 5px 10px hsl(40, 20%, 89%), 
+                            inset -5px -5px 10px hsl(40, 30%, 100%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+.neu-container {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.neu-card {
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--neu-shadow-light);
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 24px;
+}
+
+.neu-button {
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: bold;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  box-shadow: var(--neu-shadow-light);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.neu-button:active {
+  box-shadow: var(--neu-shadow-inset-light);
+  color: var(--primary);
+}
+
+.neu-button.primary {
+  background: var(--primary);
+  color: var(--text-light);
+  box-shadow: 5px 5px 10px hsla(24, 89%, 65%, 0.4), 
+             -5px -5px 10px hsla(24, 89%, 65%, 0.1);
+}
+.neu-button.primary:active {
+  box-shadow: inset 5px 5px 10px hsla(24, 89%, 55%, 0.8), 
+              inset -5px -5px 10px hsla(24, 89%, 75%, 0.8);
+}
+
+.neu-input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background: var(--surface);
+  box-shadow: var(--neu-shadow-inset-light);
+  margin-bottom: 16px;
+  outline: none;
+  font-size: 16px;
+  color: var(--text-dark);
+}
+
+.neu-input::placeholder {
+  color: hsl(240, 10%, 40%);
+}
+
+.brand-text {
+  color: var(--primary);
+}
+
+h1.header {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.error-msg {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success-msg {
+  color: green;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.app-bar {
+  width: 100%;
+  padding: 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}

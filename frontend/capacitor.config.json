@@ -1,0 +1,6 @@
+{
+  "appId": "com.event.checkin",
+  "appName": "Event Check-In",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
