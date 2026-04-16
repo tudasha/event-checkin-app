@@ -1,7 +1,7 @@
 services:
   - type: web
     name: event-backend
-    env: docker
+    runtime: docker
     plan: free
     branch: main
     dockerfilePath: backend/Dockerfile
