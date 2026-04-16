@@ -4,6 +4,7 @@ services:
     env: docker
     plan: free
     branch: main
+    dockerfilePath: backend/Dockerfile
     envVars:
       - key: DB_URL
         fromDatabase:
@@ -17,7 +18,10 @@ services:
         fromDatabase:
           name: event-db
           property: password
-    rootDir: backend
+      - key: SPRING_MAIL_USERNAME
+        value: tudasherxd@gmail.com
+      - key: SPRING_MAIL_PASSWORD
+        value: ajcsmhmxqbizykku
 
 databases:
   - name: event-db
