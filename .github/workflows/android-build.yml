@@ -37,7 +37,7 @@ jobs:
         working-directory: frontend
         run: npm run build
         env:
-          VITE_API_URL: https://event-backend.onrender.com
+          VITE_API_URL: https://event-backend-u3jp.onrender.com
 
       - name: Set up Capacitor
         working-directory: frontend

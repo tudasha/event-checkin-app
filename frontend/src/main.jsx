@@ -8,6 +8,10 @@ import axios from 'axios'
 // In dev, if VITE_API_URL is missing, it will use the proxy ('')
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || ''
 
+// Prevent infinite loading by setting a global timeout of 10 seconds.
+// If the backend doesn't answer in 10s, it throws an error.
+axios.defaults.timeout = 10000;
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
