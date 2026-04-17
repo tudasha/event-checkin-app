@@ -29,30 +29,32 @@ public class EmailService {
 
             if (attendee.getHasCheckedIn() != null && attendee.getHasCheckedIn()) {
                 // Thank You Email
-                helper.setSubject("Thank You for Joining Us!");
+                helper.setSubject("Îți mulțumim pentru participare - Oradea Music Lab!");
                 
                 String htmlMsg = """
                         <div style="font-family: Arial, sans-serif; text-align: center; color: #333; padding: 20px; background: #fcf9f2; border-radius: 12px;">
-                            <h1 style="color: #ff914d;">Welcome, %s!</h1>
-                            <p>Thank you so much for registering and checking in to our event today!</p>
-                            <p>We hope you have an incredible time!</p>
+                            <h1 style="color: #ff914d;">Salutare, %s!</h1>
+                            <p>Îți mulțumim enorm că te-ai înregistrat și ai participat la ediția noastră Oradea Music Lab (OML)!</p>
+                            <p>Sperăm că te-ai simțit excelent, ai susținut noile talente locale și că ai savurat muzica alături de comunitatea noastră.</p>
+                            <p style="margin-top: 20px; font-weight: bold; color: #ff914d;">Ne revedem la următorul open-mic!</p>
                         </div>
                         """.formatted(attendee.getFullName());
                 
                 helper.setText(htmlMsg, true);
             } else {
                 // Ticket Email
-                helper.setSubject("Your Event Ticket is Here!");
+                helper.setSubject("Biletul tău OML este aici!");
                 
                 String qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + attendee.getQrToken();
                 
                 String htmlMsg = """
                         <div style="font-family: Arial, sans-serif; text-align: center; color: #333; padding: 20px; background: #fcf9f2; border-radius: 12px;">
-                            <h1 style="color: #ff914d;">Your Ticket is Ready!</h1>
-                            <p>Hi %s,</p>
-                            <p style="margin-bottom: 20px;">You have successfully registered. Please present the QR code below at the entrance to check in.</p>
-                            <img src="%s" alt="Your Ticket QR Code" style="margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; background: white;" />
+                            <h1 style="color: #ff914d;">Biletul tău OML este pregătit! 🎵</h1>
+                            <p>Salutare, <strong>%s</strong>,</p>
+                            <p style="margin-bottom: 20px;">Te-ai înregistrat cu succes la Oradea Music Lab. Te rugăm să pregătești codul QR de mai jos și să-l scanezi împreună cu staff-ul la intrarea în locație.</p>
+                            <img src="%s" alt="Codul QR al biletului tău OML" style="margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; background: white;" />
                             <p style="font-size: 0.9em; color: gray;">Ticket ID: %s</p>
+                            <p style="margin-top: 15px; font-weight: bold;">Abia așteptăm să te ascultăm / să te vedem în public!</p>
                         </div>
                         """.formatted(attendee.getFullName(), qrUrl, attendee.getQrToken());
                 
