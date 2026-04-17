@@ -6,8 +6,6 @@ import com.stripe.model.Event;
 import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -63,13 +61,13 @@ public class StripeWebhookController {
                 String rawJsonString = dataObjectDeserializer.getRawJson();
                 if (rawJsonString != null) {
                     try {
-                        ObjectMapper mapper = new ObjectMapper();
-                        JsonNode rawJson = mapper.readTree(rawJsonString);
-                        if (rawJson.has("client_reference_id") && !rawJson.get("client_reference_id").isNull()) {
-                            clientReferenceId = rawJson.get("client_reference_id").asText();
+                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\"client_reference_id\"\\s*:\\s*\"([^\"]+)\"");
+                        java.util.regex.Matcher matcher = pattern.matcher(rawJsonString);
+                        if (matcher.find()) {
+                            clientReferenceId = matcher.group(1);
                         }
                     } catch (Exception parseEx) {
-                        System.err.println("⚠️ JSON Parser Error: " + parseEx.getMessage());
+                        System.err.println("⚠️ Regex Parser Error: " + parseEx.getMessage());
                     }
                 }
                 
