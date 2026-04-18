@@ -16,16 +16,24 @@ public class AttendeeController {
     @Autowired
     private EmailService emailService;
 
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
+
     @GetMapping
     public List<Attendee> getAllAttendees() {
         return attendeeRepository.findAll();
     }
 
     @GetMapping("/scan/{qrToken}")
-    public ResponseEntity<Attendee> getAttendeeByQrToken(@PathVariable String qrToken) {
+    public ResponseEntity<?> getAttendeeByQrToken(@PathVariable String qrToken) {
         return attendeeRepository.findByQrToken(qrToken)
-                .map(attendee -> {
-                    if (attendee.getHasPaid() != null && attendee.getHasPaid()) {
+                .<ResponseEntity<?>>map(attendee -> {
+                    if (Boolean.TRUE.equals(attendee.getHasCheckedIn())) {
+                        return ResponseEntity.status(409).body("ALREADY_SCANNED");
+                    }
+                    if (Boolean.TRUE.equals(attendee.getHasPaid())) {
                         attendee.setHasCheckedIn(true);
                         attendeeRepository.save(attendee);
                     }
@@ -39,6 +47,25 @@ public class AttendeeController {
         Attendee saved = attendeeRepository.save(attendee);
         emailService.sendRegistrationEmail(saved);
         return saved;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Attendee> updateAttendee(@PathVariable java.util.UUID id, @RequestBody Attendee attendeeDetails) {
+        return attendeeRepository.findById(id).map(attendee -> {
+            if (attendeeDetails.getFullName() != null) attendee.setFullName(attendeeDetails.getFullName());
+            if (attendeeDetails.getAge() != null) attendee.setAge(attendeeDetails.getAge());
+            if (attendeeDetails.getEmail() != null) attendee.setEmail(attendeeDetails.getEmail());
+            return ResponseEntity.ok(attendeeRepository.save(attendee));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAttendee(@PathVariable java.util.UUID id) {
+        if (attendeeRepository.existsById(id)) {
+            attendeeRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}/pay")

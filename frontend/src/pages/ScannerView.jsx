@@ -35,7 +35,11 @@ function ScannerView() {
         const res = await axios.get(`/api/attendees/scan/${decodedText}`);
         setAttendee(res.data);
     } catch (err) {
-        setErrorMsg('QR Token not found or invalid.');
+        if (err.response && err.response.status === 409) {
+            setErrorMsg('Ticket has already been scanned -> scan another');
+        } else {
+            setErrorMsg('QR Token not found or invalid.');
+        }
         console.error(err);
     }
   };
