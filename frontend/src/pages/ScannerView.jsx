@@ -70,11 +70,22 @@ function ScannerView() {
       <div className="neu-card">
         {!attendee ? (
             <>
-                <div id="qr-reader" style={{ width: '100%', borderRadius: '12px', overflow: 'hidden' }}></div>
-                {errorMsg && <p className="error-msg">{errorMsg}</p>}
-                <p style={{ textAlign: 'center', marginTop: '16px', color: 'var(--text-dark)', opacity: 0.7 }}>
-                  Point camera at ticket QR code
-                </p>
+                <div id="qr-reader" style={{ width: '100%', borderRadius: '12px', overflow: 'hidden', display: errorMsg ? 'none' : 'block' }}></div>
+                {errorMsg && (
+                    <div style={{ textAlign: 'center', marginTop: '16px' }}>
+                        <p className="error-msg" style={{ marginBottom: '16px', fontWeight: 'bold', color: 'hsl(0, 80%, 60%)' }}>
+                            {errorMsg}
+                        </p>
+                        <button className="neu-button primary" onClick={() => window.location.reload()}>
+                          Scan Another
+                        </button>
+                    </div>
+                )}
+                {!errorMsg && (
+                    <p style={{ textAlign: 'center', marginTop: '16px', color: 'var(--text-dark)', opacity: 0.7 }}>
+                      Point camera at ticket QR code
+                    </p>
+                )}
             </>
         ) : (
             <div style={{ textAlign: 'center' }}>
