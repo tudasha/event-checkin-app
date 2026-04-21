@@ -27,8 +27,8 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 2. Allow open Web Registration (POST /api/attendees)
-        if (uri.startsWith("/api/attendees") && "POST".equalsIgnoreCase(request.getMethod())) {
+        // 2. Allow open Web Registration (POST) and Server Ping
+        if (uri.equals("/api/attendees/ping") || (uri.startsWith("/api/attendees") && "POST".equalsIgnoreCase(request.getMethod()))) {
             return true;
         }
 
