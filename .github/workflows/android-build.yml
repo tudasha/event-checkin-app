@@ -38,6 +38,7 @@ jobs:
         run: npm run build
         env:
           VITE_API_URL: https://event-backend-u3jp.onrender.com
+          VITE_ADMIN_TOKEN: ${{ secrets.VITE_ADMIN_TOKEN }}
 
       - name: Set up Capacitor
         working-directory: frontend

@@ -14,6 +14,7 @@ function RegisterView() {
     isOver18: false,
     hasParentalConsent: false,
     hasPaid: false,
+    hasAcceptedTerms: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,11 @@ function RegisterView() {
     if(!formData.fullName || !formData.age) {
         setMsg('Please fill out name and age');
         addLog('Form submission blocked: Missing name or age.');
+        return;
+    }
+    if(!formData.hasAcceptedTerms) {
+        setMsg('Please accept Terms & Conditions (GDPR) to continue');
+        addLog('Form submission blocked: Missing GDPR terms.');
         return;
     }
 
@@ -135,7 +141,11 @@ function RegisterView() {
         <input className="neu-input" name="referralSource" placeholder="Where did you find out about us?" value={formData.referralSource} onChange={handleChange} />
         <input className="neu-input" name="dietaryRestrictions" placeholder="Dietary Restrictions" value={formData.dietaryRestrictions} onChange={handleChange} />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px', marginLeft: '5px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px', marginLeft: '5px', fontSize: '0.9rem' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', color: 'var(--primary)', fontWeight: 'bold' }}>
+                <input type="checkbox" name="hasAcceptedTerms" checked={formData.hasAcceptedTerms} onChange={handleChange} style={{marginTop: '4px'}} />
+                <span>I agree to the Terms & Conditions (GDPR) *</span>
+            </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <input type="checkbox" name="mediaConsent" checked={formData.mediaConsent} onChange={handleChange} />
                 I consent to be photographed/filmed
