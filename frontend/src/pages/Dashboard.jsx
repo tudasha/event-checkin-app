@@ -59,6 +59,12 @@ function Dashboard() {
             View All Attendees
           </button>
         )}
+
+        {isAdmin && (
+          <button className="neu-button" style={{color: '#ffaa00', border: '1px solid var(--background)', marginTop: '20px'}} onClick={() => navigate('/logs')}>
+            System Logs & Network
+          </button>
+        )}
       </div>
     </>
   );
