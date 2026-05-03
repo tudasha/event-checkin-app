@@ -24,7 +24,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             
-            helper.setFrom("tudasherxd@gmail.com");
+            helper.setFrom("oradeamusiclab@gmail.com");
             helper.setTo(attendee.getEmail());
 
             if (attendee.getHasCheckedIn() != null && attendee.getHasCheckedIn()) {
