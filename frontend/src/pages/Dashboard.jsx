@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ function Dashboard() {
       </div>
       
       <div className="neu-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <img src="/vite.svg" alt="logo" style={{ width: '80px', height: '80px', marginBottom: '20px' }} />
+        <img src={logo} alt="OML Logo" style={{ width: '150px', height: 'auto', marginBottom: '20px' }} />
         
         {isAdmin && (
           <button className="neu-button primary" onClick={() => navigate('/scan')}>
