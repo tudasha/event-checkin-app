@@ -5,6 +5,7 @@ import ScannerView from './pages/ScannerView';
 import Dashboard from './pages/Dashboard';
 import RegisterView from './pages/RegisterView';
 import AttendeesListView from './pages/AttendeesListView';
+import AttendeeDetailsView from './pages/AttendeeDetailsView';
 import LogsView from './pages/LogsView';
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
           <Route path="/scan" element={<ScannerView />} />
           <Route path="/register" element={<RegisterView />} />
           <Route path="/attendees" element={<AttendeesListView />} />
+          <Route path="/attendees/:id" element={<AttendeeDetailsView />} />
           <Route path="/logs" element={<LogsView />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

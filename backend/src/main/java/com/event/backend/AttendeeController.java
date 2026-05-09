@@ -68,6 +68,12 @@ public class AttendeeController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAllAttendees() {
+        attendeeRepository.deleteAll();
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{id}/pay")
     public ResponseEntity<Attendee> markAsPaid(@PathVariable java.util.UUID id) {
         return attendeeRepository.findById(id).map(attendee -> {

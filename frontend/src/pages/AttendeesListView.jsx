@@ -60,6 +60,35 @@ function AttendeesListView() {
     }
   };
 
+  const handleDeleteAll = async () => {
+    const code = window.prompt("Enter code to delete all data:");
+    if (code === "9986") {
+      if (window.confirm("Are you absolutely sure? This cannot be undone.")) {
+        try {
+          await axios.delete('/api/attendees/all');
+          setAttendees([]);
+          alert('All data deleted successfully.');
+        } catch (err) {
+          console.error(err);
+          alert('Failed to delete all data.');
+        }
+      }
+    } else if (code !== null) {
+      alert("Incorrect code.");
+    }
+  };
+
+  const getRowStyle = (user) => {
+    const hasAllergy = user.dietaryRestrictions && user.dietaryRestrictions.trim().toLowerCase() !== 'none' && user.dietaryRestrictions.trim() !== '';
+    if (hasAllergy) {
+      return { borderBottom: '1px solid var(--background)', backgroundColor: 'rgba(255, 204, 0, 0.2)' };
+    }
+    if (user.hasCheckedIn) {
+      return { borderBottom: '1px solid var(--background)', backgroundColor: 'rgba(0, 255, 0, 0.1)' };
+    }
+    return { borderBottom: '1px solid var(--background)' };
+  };
+
   return (
     <>
       <div className="app-bar">
@@ -70,6 +99,14 @@ function AttendeesListView() {
       </div>
 
       <div className="neu-card" style={{ maxWidth: '100%', overflowX: 'auto', padding: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <strong>Registered:</strong> {attendees.length} | <strong>Checked-in:</strong> {attendees.filter(a => a.hasCheckedIn).length}
+          </div>
+          <button className="neu-button" style={{ width: 'auto', padding: '6px 12px', margin: 0, background: '#ff4444', color: 'white' }} onClick={handleDeleteAll}>
+            Delete All
+          </button>
+        </div>
         {loading ? (
             <p style={{textAlign: 'center'}}>Loading...</p>
         ) : (
@@ -84,7 +121,7 @@ function AttendeesListView() {
               </thead>
               <tbody>
                 {attendees.map(user => (
-                  <tr key={user.id} style={{ borderBottom: '1px solid var(--background)' }}>
+                  <tr key={user.id} style={getRowStyle(user)}>
                     {editingUserId === user.id ? (
                       <>
                         <td style={{ padding: '12px 8px' }}>
@@ -124,7 +161,8 @@ function AttendeesListView() {
                             )}
                         </td>
                         <td style={{ padding: '12px 8px', textAlign: 'right', minWidth: '130px' }}>
-                           <button className="neu-button" style={{ padding: '4px 8px', margin: '0 4px 0 0', display: 'inline-block', width: 'auto' }} onClick={() => handleEditClick(user)}>Edit</button>
+                           <button className="neu-button" style={{ padding: '4px 8px', margin: '0 4px 4px 0', display: 'inline-block', width: 'auto', background: 'var(--primary)', color: 'white' }} onClick={() => navigate(`/attendees/${user.id}`)}>Details</button>
+                           <button className="neu-button" style={{ padding: '4px 8px', margin: '0 4px 4px 0', display: 'inline-block', width: 'auto' }} onClick={() => handleEditClick(user)}>Edit</button>
                            <button className="neu-button" style={{ padding: '4px 8px', margin: 0, display: 'inline-block', width: 'auto', background: '#ff6b6b', color: 'white' }} onClick={() => handleDelete(user.id)}>Del</button>
                         </td>
                       </>
