@@ -19,10 +19,17 @@ services:
         fromDatabase:
           name: event-db
           property: password
+      # sync: false — value is set directly in the Render dashboard, never stored in git.
+      # Previous versions of this file hardcoded a real Gmail App Password here in plaintext;
+      # that password (for tudasherxd@gmail.com) must be treated as compromised and rotated.
       - key: SPRING_MAIL_USERNAME
-        value: tudasherxd@gmail.com
+        sync: false
       - key: SPRING_MAIL_PASSWORD
-        value: ajcsmhmxqbizykku
+        sync: false
+      # Was missing entirely before, meaning production ran on application.properties'
+      # hardcoded fallback token. Set a freshly generated random value in the dashboard.
+      - key: ADMIN_TOKEN
+        sync: false
 
 databases:
   - name: event-db
