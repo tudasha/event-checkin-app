@@ -17,9 +17,13 @@ public class WebConfig implements WebMvcConfigurer {
     // from their browser (spam registrations, each one firing a real email). The public
     // registration site is the only real browser caller (the admin app is a Capacitor/Android
     // WebView, not subject to CORS, and its local dev server proxies /api same-origin — see
-    // frontend/vite.config.js). Configurable via env var so a future custom domain doesn't
-    // need a code change.
-    @Value("${app.cors.allowed-origins:https://oml-website.onrender.com}")
+    // frontend/vite.config.js). Configurable via env var so a *new* domain doesn't need a code
+    // change — but the real production domain, oradeamusiclab.org, isn't recorded anywhere in
+    // the oradea-music-lab repo (no CNAME file, no render.yaml `domains:` entry — it was added
+    // directly in Render's dashboard), so it has to be listed explicitly here. The first fix
+    // only had the onrender.com URL and broke real registrations on the actual site. Both stay
+    // listed since Render serves them simultaneously with no redirect between the two.
+    @Value("${app.cors.allowed-origins:https://oradeamusiclab.org,https://www.oradeamusiclab.org,https://oml-website.onrender.com}")
     private String[] allowedOrigins;
 
     @Override
