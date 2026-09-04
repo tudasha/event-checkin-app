@@ -2,6 +2,16 @@
 
 echo "🚀 Starting Event Check-in Environment..."
 
+# 0. Load local secrets (SPRING_MAIL_USERNAME/PASSWORD, ADMIN_TOKEN) from a gitignored .env
+#    at repo root, if present — see backend/.env.example. These no longer have insecure
+#    defaults baked into application.properties, so the backend won't start without them.
+if [ -f .env ]; then
+  set -a
+  # shellcheck disable=SC1091
+  . ./.env
+  set +a
+fi
+
 # 1. Start the database (Requires sudo as we saw earlier)
 echo "📦 Starting Database Container..."
 sudo docker-compose up -d

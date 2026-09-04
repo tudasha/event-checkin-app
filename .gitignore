@@ -20,3 +20,9 @@ target/
 # OS
 .DS_Store
 Thumbs.db
+
+# Secrets / local env files — never commit real credentials. Example/template files
+# (backend/.env.example, frontend/.env.local.example) end in .example and stay tracked.
+.env
+.env.*
+!*.example
